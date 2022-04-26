@@ -8,6 +8,7 @@ pipeline {
      
      SERVICE_NAME = "fleetman-webapp"
      REPOSITORY_TAG="${YOUR_DOCKERHUB_USERNAME}/${ORGANIZATION_NAME}-${SERVICE_NAME}:${BUILD_ID}"
+     dockerhub=credentials('dockerhub') 
    }
 
    stages {
@@ -25,6 +26,8 @@ pipeline {
 
       stage('Build and Push Image') {
          steps {
+           sh 'echo password: $dockerhub_PSW' 
+           sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin' 
            sh 'docker image build -t ${REPOSITORY_TAG} .'
          }
       }
